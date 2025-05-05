@@ -41,39 +41,58 @@ public class Blue_3: Blue
 
         char[] arrSymbols = new char[char.MaxValue];
         int countSymbols = 0;
+        int countChars = 0;
         for (int i = 0; i < foo.Length; i++)
         {
-            if (!arrSymbols.Contains(char.ToLower(foo[i][0])) && !listSymbols.Contains(foo[i][0]))
+            bool isTrue = false;
+            for (int j = 0; j < foo[i].Length; j++)
             {
-                arrSymbols[countSymbols] = char.ToLower(foo[i][0]);
-                countSymbols++;
-            }
-        }
+                if (char.IsDigit(foo[i][j]) && !isTrue)
+                {
+                    isTrue = true;
+                    countChars++;
+                }
+                if (!char.IsLetter(foo[i][j])) continue;
 
+                if (!arrSymbols.Contains(char.ToLower(foo[i][j])) && !isTrue)
+                {
+                    arrSymbols[countSymbols] = char.ToLower(foo[i][j]);
+                    countSymbols++;
+                }
+                isTrue = true;
+            }
+
+            if (!isTrue) countChars++;
+        }
+        
         (char, double)[] result = new (char, double)[countSymbols];
         for (int i = 0; i < countSymbols; i++)
         {
             result[i] = (arrSymbols[i], 0.0);
         }
-        for (int i = 0; i < foo.Length; i++)
-        {
-            if (!listSymbols.Contains(foo[i][0]))
-            {
+        for (int i = 0; i < foo.Length; i++) {
                 bool isTrue = false;
                 for (int j = 0; j < result.Length; j++)
                 {
-                    if (result[j].Item1 == char.ToLower(foo[i][0]) && !isTrue)
+                    int index = 0;
+                    while (index < foo[i].Length && !char.IsLetter(foo[i][index]))
+                    {
+                        if (char.IsDigit(foo[i][index])) isTrue = true;
+                        index++;
+                    }
+
+                    if (index == foo[i].Length) index = 0;
+                    if (result[j].Item1.Equals(char.ToLower(foo[i][index])) && !isTrue)
                     {
                         result[j].Item2++;
                         isTrue = true;
                     }
                 }
-            }
         }
 
         for (int i = 0; i < result.Length; i++)
         {
-            result[i].Item2 = Math.Round(result[i].Item2 * 100.0 / (foo.Length - 1), 4);
+            result[i].Item2 = Math.Round(result[i].Item2 * 100.0 / (foo.Length - countChars), 4);
         }
         
         Array.Sort(result, (first, second) =>

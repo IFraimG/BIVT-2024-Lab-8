@@ -5,7 +5,7 @@ public class Blue_2: Blue
     private string _output;
     private string _search;
 
-    private char[] listSymbols = new char[] { '.', '!', '?', ',', ':', '\"', ';', '–', '(', ')', '[', ']', '{', '}', '/' };
+    private char[] listSymbols = new char[] { '.', '!', '?', ',', '\"', ':', ';', '–', '(', ')', '[', ']', '{', '}', '/' };
     public string Output => _output;
 
     public Blue_2(string input, string search): base(input)
@@ -22,24 +22,34 @@ public class Blue_2: Blue
         string[] foo = this.Input.Split(" ");
 
         bool isFirstContinued = false;
-        char symbol = ' ';
+        char symbol = '~';
         for (int i = 0; i < foo.Length; i++)
         {
             if (!foo[i].Contains(this._search))
             {
-                if (symbol != ' ') result += symbol;
                 if (i > 0 && !isFirstContinued)
                 {
                     result += " ";
                 }
                 isFirstContinued = false;
                 result += foo[i];
-                symbol = ' ';
             }
             else
             {
-                if (listSymbols.Contains(foo[i][foo[i].Length - 1])) symbol = foo[i][foo[i].Length - 1];
-                if (i == 0) isFirstContinued = true;
+                bool isFirst = true;
+                for (int j = 0; j < foo[i].Length; j++) 
+                {
+                    if (listSymbols.Contains(foo[i][j]))
+                    {
+                        if (isFirst && j != foo[i].Length - 1)
+                        {
+                            result += ' ';
+                            isFirst = false;
+                        }
+                        result += foo[i][j];
+                    }
+                }
+                if (i == 0) isFirstContinued = true;                   
             }
         }
 
