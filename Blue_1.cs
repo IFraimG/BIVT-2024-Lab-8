@@ -4,7 +4,7 @@ public class Blue_1 : Blue
 {
     private string[] _output;
     
-    public string[] Output => _output;
+    public string[] Output => _output.ToArray();
     
     public Blue_1(string input): base(input)
     {
@@ -44,6 +44,8 @@ public class Blue_1 : Blue
     public override string ToString()
     {
         if (this._output == null) return null;
-        return string.Join("\r\n", this._output);
+        string[] copyOutput = (string[])this._output.Clone();
+
+        return string.Join("\r\n", copyOutput);
     }
 }
