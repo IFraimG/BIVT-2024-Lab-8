@@ -4,7 +4,7 @@ public class Blue_1 : Blue
 {
     private string[] _output;
     
-    public string[] Output => _output.ToArray();
+    public string[] Output => _output?.ToArray() ?? Array.Empty<string>();
     
     public Blue_1(string input): base(input)
     {
